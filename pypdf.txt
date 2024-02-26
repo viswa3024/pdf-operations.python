@@ -1,0 +1,57 @@
+As of my last knowledge update in January 2022, the PyPDF library you mentioned is different from PyPDF2. If you want examples for using the PyPDF library, here are some basic operations you can perform:
+
+Install PyPDF:
+
+pip install pypdf
+
+
+Example: Merge PDFs:
+
+from PyPDF import PdfFileReader, PdfFileWriter
+
+def merge_pdfs(input_paths, output_path):
+    pdf_writer = PdfFileWriter()
+
+    for path in input_paths:
+        pdf_reader = PdfFileReader(file(path, 'rb'))
+        for page_num in range(pdf_reader.getNumPages()):
+            pdf_writer.addPage(pdf_reader.getPage(page_num))
+
+    with open(output_path, 'wb') as output_file:
+        pdf_writer.write(output_file)
+
+if __name__ == "__main__":
+    input_paths = ['document1.pdf', 'document2.pdf']
+    output_path = 'merged_document.pdf'
+    merge_pdfs(input_paths, output_path)
+    print(f'Merged PDFs saved to {output_path}')
+
+
+
+Example: Extract Text from PDF:
+
+from PyPDF import PdfFileReader
+
+def extract_text(input_path):
+    with open(input_path, 'rb') as pdf_file:
+        pdf_reader = PdfFileReader(pdf_file)
+        text = ''
+
+        for page_num in range(pdf_reader.getNumPages()):
+            text += pdf_reader.getPage(page_num).extract_text()
+
+        return text
+
+if __name__ == "__main__":
+    input_path = 'document_with_text.pdf'
+    extracted_text = extract_text(input_path)
+    print('Extracted Text:\n', extracted_text)
+
+
+Please note that the examples provided are based on the assumption that the PyPDF library you are using follows similar conventions as PyPDF (as of my last update in January 2022). If there have been changes or updates to the library after that, you may want to refer to the official documentation or source code for the most accurate and up-to-date information.
+
+Keep in mind that using PyPDF may not be the most modern or recommended choice for working with PDFs in Python. PyPDF2 and PyMuPDF (MuPDF) are more commonly used libraries for this purpose as of my last update.
+
+
+
+

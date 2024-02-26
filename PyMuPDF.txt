@@ -369,3 +369,23 @@ pip install PyMuPDF tabula-py
 
 
 This example combines PyMuPDF for text and image extraction with tabula-py for table extraction. Adjust the paths and integrate it into your workflow accordingly.
+
+To merge PDFs using PyMuPDF (MuPDF), you can use the following code snippet:
+
+import fitz  # PyMuPDF
+
+def merge_pdfs(input_pdfs, output_pdf):
+    merged_pdf = fitz.open()
+
+    for pdf in input_pdfs:
+        pdf_document = fitz.open(pdf)
+        merged_pdf.insert_pdf(pdf_document)
+
+    merged_pdf.save(output_pdf)
+    merged_pdf.close()
+
+# Example usage:
+input_pdfs = ['file1.pdf', 'file2.pdf']  # Replace with the paths to your PDF files
+output_pdf = 'merged_file.pdf'            # Replace with the desired output path
+
+merge_pdfs(input_pdfs, output_pdf)
