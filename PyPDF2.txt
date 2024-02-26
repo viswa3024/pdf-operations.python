@@ -1,0 +1,139 @@
+
+Certainly! If you want to work with PDF files in Python, you can use the PyPDF2 library. Here's a simple example of how to manipulate PDFs using PyPDF2:
+
+Install PyPDF2:
+
+pip install PyPDF2
+
+
+Create a new Python script (e.g., pdf_example.py) and use the following code:
+
+import PyPDF2
+
+def merge_pdfs(input_paths, output_path):
+    pdf_merger = PyPDF2.PdfFileMerger()
+    
+    for path in input_paths:
+        with open(path, 'rb') as pdf_file:
+            pdf_merger.append(pdf_file)
+    
+    with open(output_path, 'wb') as output_file:
+        pdf_merger.write(output_file)
+
+def rotate_pdf(input_path, output_path, rotation_angle):
+    with open(input_path, 'rb') as pdf_file:
+        pdf_reader = PyPDF2.PdfReader(pdf_file)
+        pdf_writer = PyPDF2.PdfWriter()
+
+        for page_num in range(len(pdf_reader.pages)):
+            page = pdf_reader.pages[page_num]
+            page.rotate_clockwise(rotation_angle)
+            pdf_writer.add_page(page)
+
+        with open(output_path, 'wb') as output_file:
+            pdf_writer.write(output_file)
+
+if __name__ == "__main__":
+    # Example 1: Merge PDFs
+    input_paths = ['document1.pdf', 'document2.pdf']
+    output_path = 'merged_document.pdf'
+    merge_pdfs(input_paths, output_path)
+    print(f'Merged PDFs saved to {output_path}')
+
+    # Example 2: Rotate PDF
+    input_path = 'original_document.pdf'
+    output_path = 'rotated_document.pdf'
+    rotation_angle = 90
+    rotate_pdf(input_path, output_path, rotation_angle)
+    print(f'Rotated PDF saved to {output_path}')
+
+
+Replace the placeholder file names (document1.pdf, document2.pdf, original_document.pdf) with your actual file names.
+
+This script demonstrates how to merge PDF files and rotate the pages in a PDF. You can modify it based on your specific requirements. Make sure to check the PyPDF2 documentation for more details: https://pythonhosted.org/PyPDF2/
+
+
+--------------------------------------------------------
+
+give full length program to cover all functionalities of PyPDF2
+
+Certainly! Below is a more comprehensive Python script that covers various functionalities of PyPDF2, such as merging, splitting, rotating, and extracting text from PDFs:
+
+
+import PyPDF2
+
+def merge_pdfs(input_paths, output_path):
+    pdf_merger = PyPDF2.PdfFileMerger()
+    
+    for path in input_paths:
+        with open(path, 'rb') as pdf_file:
+            pdf_merger.append(pdf_file)
+    
+    with open(output_path, 'wb') as output_file:
+        pdf_merger.write(output_file)
+
+def split_pdf(input_path, output_paths):
+    with open(input_path, 'rb') as pdf_file:
+        pdf_reader = PyPDF2.PdfReader(pdf_file)
+
+        for page_num in range(len(pdf_reader.pages)):
+            pdf_writer = PyPDF2.PdfWriter()
+            pdf_writer.add_page(pdf_reader.pages[page_num])
+
+            output_path = output_paths.format(page_num + 1)
+            with open(output_path, 'wb') as output_file:
+                pdf_writer.write(output_file)
+                print(f'Page {page_num + 1} saved to {output_path}')
+
+def rotate_pdf(input_path, output_path, rotation_angle):
+    with open(input_path, 'rb') as pdf_file:
+        pdf_reader = PyPDF2.PdfReader(pdf_file)
+        pdf_writer = PyPDF2.PdfWriter()
+
+        for page_num in range(len(pdf_reader.pages)):
+            page = pdf_reader.pages[page_num]
+            page.rotate_clockwise(rotation_angle)
+            pdf_writer.add_page(page)
+
+        with open(output_path, 'wb') as output_file:
+            pdf_writer.write(output_file)
+
+def extract_text(input_path):
+    with open(input_path, 'rb') as pdf_file:
+        pdf_reader = PyPDF2.PdfReader(pdf_file)
+        
+        text = ''
+        for page_num in range(len(pdf_reader.pages)):
+            text += pdf_reader.pages[page_num].extract_text()
+
+        return text
+
+if __name__ == "__main__":
+    # Example 1: Merge PDFs
+    input_paths = ['document1.pdf', 'document2.pdf']
+    merged_output_path = 'merged_document.pdf'
+    merge_pdfs(input_paths, merged_output_path)
+    print(f'Merged PDFs saved to {merged_output_path}')
+
+    # Example 2: Split PDF
+    input_path_to_split = 'original_document.pdf'
+    split_output_template = 'split_page_{}.pdf'
+    split_pdf(input_path_to_split, split_output_template)
+
+    # Example 3: Rotate PDF
+    input_path_to_rotate = 'original_document.pdf'
+    rotated_output_path = 'rotated_document.pdf'
+    rotation_angle = 90
+    rotate_pdf(input_path_to_rotate, rotated_output_path, rotation_angle)
+    print(f'Rotated PDF saved to {rotated_output_path}')
+
+    # Example 4: Extract Text from PDF
+    input_path_to_extract_text = 'document_with_text.pdf'
+    extracted_text = extract_text(input_path_to_extract_text)
+    print('Extracted Text:\n', extracted_text)
+
+
+Replace the placeholder file names (document1.pdf, document2.pdf, original_document.pdf, document_with_text.pdf) with your actual file names. This script covers merging, splitting, rotating, and extracting text functionalities.
+
+
+

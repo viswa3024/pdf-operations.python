@@ -216,3 +216,6 @@ pip install pdfplumber
 
 
 Before using the code examples, replace 'example.pdf' with the actual path or URL of the PDF file you want to work with.
+
+
+
