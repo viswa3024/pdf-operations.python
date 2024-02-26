@@ -1,0 +1,218 @@
+pdfplumber examle from scrach
+
+
+Sure, let's create a simple example of using pdfplumber in Python to extract text from a PDF file. First, make sure you have pdfplumber installed. You can install it using:
+
+
+pip install pdfplumber
+
+
+Now, let's create a basic script:
+
+
+import pdfplumber
+
+def extract_text_from_pdf(pdf_path):
+    with pdfplumber.open(pdf_path) as pdf:
+        text = ''
+        for page in pdf.pages:
+            text += page.extract_text()
+    return text
+
+if __name__ == "__main__":
+    # Replace 'your_pdf_file.pdf' with the actual path to your PDF file
+    pdf_path = 'your_pdf_file.pdf'
+
+    extracted_text = extract_text_from_pdf(pdf_path)
+
+    # Print the extracted text
+    print(extracted_text)
+
+
+
+Replace 'your_pdf_file.pdf' with the actual path to your PDF file. This script defines a function extract_text_from_pdf that takes a PDF file path as input and returns the extracted text from all pages. The if __name__ == "__main__": block ensures that the script is executed when run directly.
+
+Save this script as, for example, pdf_extractor.py and run it from the terminal:
+
+
+python pdf_extractor.py
+
+
+
+This is a basic example, and pdfplumber offers more features like extracting tables, images, and annotations. You can refer to the pdfplumber documentation for more advanced usage: https://github.com/jsvine/pdfplumber
+
+
+-----------------------------------------------------------
+
+
+give full length program to cover all functionalities of pdfplumber
+
+
+Certainly! Here's a more comprehensive example that covers various functionalities of pdfplumber, such as extracting text, tables, and images, as well as working with annotations:
+
+
+
+import pdfplumber
+
+def extract_text(pdf_path):
+    with pdfplumber.open(pdf_path) as pdf:
+        text = ''
+        for page in pdf.pages:
+            text += page.extract_text()
+    return text
+
+def extract_tables(pdf_path):
+    with pdfplumber.open(pdf_path) as pdf:
+        tables = []
+        for page in pdf.pages:
+            page_tables = page.extract_tables()
+            tables.extend(page_tables)
+    return tables
+
+def extract_images(pdf_path, image_folder='images'):
+    with pdfplumber.open(pdf_path) as pdf:
+        for i, page in enumerate(pdf.pages):
+            images = page.images
+            for j, img in enumerate(images):
+                image = img['stream'].get('Data')
+                with open(f'{image_folder}/image_{i}_{j}.png', 'wb') as f:
+                    f.write(image)
+
+def extract_annotations(pdf_path):
+    with pdfplumber.open(pdf_path) as pdf:
+        annotations = []
+        for page in pdf.pages:
+            page_annotations = page.annotations
+            annotations.extend(page_annotations)
+    return annotations
+
+if __name__ == "__main__":
+    pdf_path = 'your_pdf_file.pdf'
+    
+    # Extract text from the PDF
+    text = extract_text(pdf_path)
+    print("Extracted Text:")
+    print(text)
+
+    # Extract tables from the PDF
+    tables = extract_tables(pdf_path)
+    print("\nExtracted Tables:")
+    for table in tables:
+        print(table)
+
+    # Extract images from the PDF
+    extract_images(pdf_path)
+
+    # Extract annotations from the PDF
+    annotations = extract_annotations(pdf_path)
+    print("\nExtracted Annotations:")
+    for annotation in annotations:
+        print(annotation)
+
+
+
+Replace 'your_pdf_file.pdf' with the actual path to your PDF file. This script demonstrates how to extract text, tables, images, and annotations from a PDF file using pdfplumber. The images extracted will be saved in a folder named 'images'. You may need to create this folder in advance.
+
+Remember to install the required library if you haven't already:
+
+
+pip install pdfplumber
+
+
+
+----------------------------------------------------
+
+
+pdfplumber 
+
+explain above package and give all funtionalities with code example
+
+
+
+pdfplumber is a Python library for extracting information from PDF documents. It is built on top of the popular PDF parsing library PyPDF2 and provides a higher-level interface for working with PDFs. pdfplumber makes it easier to extract text, tables, and other data from PDF files by providing convenient methods and properties.
+
+Here are some key functionalities of pdfplumber along with code examples:
+
+
+1 . Extracting Text from PDF:
+
+
+import pdfplumber
+
+# Open the PDF file
+with pdfplumber.open('example.pdf') as pdf:
+    # Access a specific page
+    page = pdf.pages[0]
+
+    # Extract text from the page
+    text = page.extract_text()
+    print(text)
+
+
+2. Extracting Tables from PDF:
+
+
+import pdfplumber
+
+# Open the PDF file
+with pdfplumber.open('example.pdf') as pdf:
+    # Access a specific page
+    page = pdf.pages[0]
+
+    # Extract tables from the page
+    tables = page.extract_tables()
+    for table in tables:
+        for row in table:
+            print(row)
+
+
+3. Extracting Images from PDF:
+
+import pdfplumber
+
+# Open the PDF file
+with pdfplumber.open('example.pdf') as pdf:
+    # Access a specific page
+    page = pdf.pages[0]
+
+    # Extract images from the page
+    images = page.images
+    for i, img in enumerate(images):
+        img_obj = img['Image']
+        img_obj.save(f'image_{i}.png', format='PNG')
+
+
+4. Extracting Metadata:
+
+import pdfplumber
+
+# Open the PDF file
+with pdfplumber.open('example.pdf') as pdf:
+    # Access metadata
+    metadata = pdf.metadata
+    print(metadata)
+
+
+5. Search for Specific Text:
+
+import pdfplumber
+
+# Open the PDF file
+with pdfplumber.open('example.pdf') as pdf:
+    # Access a specific page
+    page = pdf.pages[0]
+
+    # Search for specific text
+    search_text = 'Hello World'
+    text_instances = page.find_text(search_text)
+    for instance in text_instances:
+        print(f"Found at page {instance['page_number']} - {instance['text']}")
+
+
+pdfplumber simplifies the process of working with PDFs in Python and provides a more convenient interface for extracting information. Make sure to install the library using:
+
+
+pip install pdfplumber
+
+
+Before using the code examples, replace 'example.pdf' with the actual path or URL of the PDF file you want to work with.

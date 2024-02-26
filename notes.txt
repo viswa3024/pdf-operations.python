@@ -1,0 +1,1082 @@
+how to use pre trained model and do summarize of text
+
+Using a pre-trained model for text summarization is a convenient way to generate summaries without training a model from scratch. One popular pre-trained model for this task is the BART (Bidirectional and Auto-Regressive Transformers) model. You can use the transformers library in Python, which provides pre-trained models like BART through the Hugging Face model hub.
+
+Here's an example using the transformers library to summarize a piece of text with BART:
+
+
+from transformers import pipeline
+
+# Load the summarization pipeline
+summarizer = pipeline("summarization")
+
+# Your input text
+input_text = """
+Put your long text here that you want to summarize.
+"""
+
+# Generate a summary
+summary = summarizer(input_text, max_length=150, min_length=50, length_penalty=2.0, num_beams=4, early_stopping=True)
+
+# Print the summary
+print("Original Text:")
+print(input_text)
+print("\nGenerated Summary:")
+print(summary[0]['summary_text'])
+
+
+
+In this example:
+
+The pipeline("summarization") loads a pre-trained summarization model.
+input_text contains the text you want to summarize.
+summarizer(input_text, ...) generates a summary based on the input text.
+max_length and min_length control the length of the generated summary.
+length_penalty adjusts the penalty for longer or shorter summaries.
+num_beams controls the number of beams used in the beam search algorithm.
+early_stopping determines whether to stop the beam search when at least num_beams sentences are finished.
+Note that you need to install the transformers library if you haven't already:
+
+
+pip install transformers
+
+
+I don't want use transformers
+
+
+If you prefer not to use the transformers library, you can use the Gensim library, which also provides an implementation of the TextRank algorithm for extractive summarization. Here's an example of how you can use Gensim for text summarization:
+
+
+from gensim.summarization import summarize
+
+# Your input text
+input_text = """
+Put your long text here that you want to summarize.
+"""
+
+# Generate a summary
+summary = summarize(input_text, ratio=0.2)  # You can adjust the ratio parameter as needed
+
+# Print the summary
+print("Original Text:")
+print(input_text)
+print("\nGenerated Summary:")
+print(summary)
+
+
+In this example, summarize is a function provided by Gensim that uses the TextRank algorithm to identify important sentences in the text and generate a summary. The ratio parameter controls the proportion of the original text to include in the summary.
+
+To use Gensim, you can install it with:
+
+pip install gensim
+
+
+Keep in mind that extractive summarization methods like TextRank select sentences directly from the original text, while transformers-based models often perform abstractive summarization, generating summaries in a more human-like way by rewriting content. Adjust the method based on your specific needs and preferences.
+
+
+i need to pretrained model with out fransformers
+
+If you prefer not to use pre-trained models from the transformers library, and you're looking for an alternative without using transformer-based models, you can consider using traditional machine learning models or rule-based methods for extractive summarization.
+
+Here's an example using the sumy library, which is a simple library for extracting summaries from text using extractive methods:
+
+
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.lsa import LsaSummarizer
+
+# Your input text
+input_text = """
+Put your long text here that you want to summarize.
+"""
+
+# Parse the text
+parser = PlaintextParser.from_string(input_text, Tokenizer("english"))
+
+# Use LSA (Latent Semantic Analysis) for summarization
+summarizer = LsaSummarizer()
+summary = summarizer(parser.document, sentences_count=3)  # Adjust the number of sentences as needed
+
+# Print the summary
+print("Original Text:")
+print(input_text)
+print("\nGenerated Summary:")
+print(" ".join(str(sentence) for sentence in summary))
+
+
+In this example:
+
+PlaintextParser is used to parse the input text.
+Tokenizer("english") is used for tokenization.
+LsaSummarizer is used for extractive summarization based on Latent Semantic Analysis.
+sentences_count controls the number of sentences in the generated summary.
+You can install the sumy library with:
+
+pip install sumy
+
+
+Keep in mind that extractive summarization methods like LSA select sentences directly from the original text based on statistical patterns, and they may not provide the same level of abstraction as transformer-based models for abstractive summarization. Choose the method that best fits your requirements and constraints.
+
+
+text summarisation pretrained models list
+
+
+As of my last knowledge update in January 2022, here are some popular pre-trained models for text summarization:
+
+BART (Facebook):
+
+Bidirectional and Auto-Regressive Transformers.
+Available through the Hugging Face model hub.
+T5 (Google):
+
+Text-To-Text Transfer Transformer.
+Hugging Face model hub provides access to T5 models.
+PEGASUS (Google):
+
+Pre-training with Extracted Gap-sentences for Abstractive Summarization.
+Hugging Face model hub provides access to PEGASUS models.
+BERTSUM (Microsoft):
+
+Extractive summarization using BERT embeddings.
+Available through the Hugging Face model hub.
+XLNet (Google):
+
+Transformer-XL model for various NLP tasks, including summarization.
+Hugging Face model hub has XLNet models.
+GPT-3 (OpenAI):
+
+Generative Pre-trained Transformer with a wide range of capabilities.
+Accessible through the OpenAI API.
+UniLM (Microsoft):
+
+Unified pre-trained models for various NLP tasks, including summarization.
+Available through the Hugging Face model hub.
+BertExt (Bert Extractive Summarizer):
+
+A library for extractive summarization using BERT embeddings.
+Not a standalone pre-trained model but a tool for extractive summarization.
+BertAbs (Bert Abstractive Summarizer):
+
+A library for abstractive summarization using BERT.
+Similar to BertExt, it's a tool rather than a standalone pre-trained model.
+Please note that the availability of these models may change, and new models may have been introduced since my last update. Additionally, the Hugging Face model hub (https://huggingface.co/models) is a valuable resource for finding and using various pre-trained models for NLP, including summarization. Always check the official documentation or model hub for the latest information on available models.
+
+
+how can i do word embeedings on text
+
+
+Word embeddings are numerical representations of words that capture semantic relationships between words. There are different techniques to create word embeddings, and one common approach is to use pre-trained word embedding models. Here, I'll provide an example using the popular spaCy library in Python, which includes pre-trained word embeddings.
+
+First, you'll need to install spaCy:
+
+
+pip install spacy
+
+
+
+Next, download a pre-trained spaCy model with word embeddings. For example, you can download the medium-sized English model:
+
+
+python -m spacy download en_core_web_md
+
+
+Now, you can use spaCy to obtain word embeddings for text:
+
+
+import spacy
+
+# Load the spaCy model with word embeddings
+nlp = spacy.load("en_core_web_md")
+
+# Your input text
+text = "Word embeddings are powerful tools for natural language processing."
+
+# Process the text with spaCy
+doc = nlp(text)
+
+# Access word embeddings for each token in the text
+for token in doc:
+    print(f"Word: {token.text}, Embedding: {token.vector[:5]}... (truncated for brevity)")
+
+
+In this example:
+
+We load the spaCy model (en_core_web_md), which includes word embeddings.
+The nlp object is used to process the input text, creating a Doc object.
+Each token in the Doc object has an associated word embedding accessible through the vector attribute.
+Keep in mind that these word embeddings are pre-trained on a large corpus of text and can be used as features for downstream natural language processing tasks or analyzed to understand the semantic relationships between words.
+
+If you need to train your own word embeddings from scratch, techniques like Word2Vec, GloVe, or FastText are commonly used. However, training word embeddings from scratch typically requires a large corpus of text data. Pre-trained models, as shown in the spaCy example, are often more practical for many applications.
+
+
+how to use word embeedings with UniLM model, give example from scrach
+
+
+UniLM (Unified Language Model) is a model developed by Microsoft Research for various natural language processing tasks, including text generation and summarization. To use UniLM, you typically fine-tune the model on your specific task.
+
+Here is a simplified example of how you might fine-tune UniLM for a summarization task using the transformers library from Hugging Face. Please note that fine-tuning requires access to a large dataset with labeled examples for your specific task, and it may be computationally intensive.
+
+
+
+import torch
+from transformers import UniLMForSeq2Seq, UniLMTokenizer, AdamW
+
+# Example: Fine-tuning UniLM for summarization
+
+# Load pre-trained UniLM model and tokenizer
+model = UniLMForSeq2Seq.from_pretrained("unilm-base-cased")
+tokenizer = UniLMTokenizer.from_pretrained("unilm-base-cased")
+
+# Define your training data (you need a dataset with input and target summaries)
+train_data = [
+    {"input_text": "Your input text for training", "target_summary": "The target summary"},
+    # Add more examples as needed
+]
+
+# Tokenize and prepare the data
+tokenized_data = tokenizer(
+    [item["input_text"] for item in train_data],
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)
+
+labels = tokenizer(
+    [item["target_summary"] for item in train_data],
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)["input_ids"]
+
+# Define your training dataset
+train_dataset = torch.utils.data.TensorDataset(
+    tokenized_data["input_ids"],
+    tokenized_data["attention_mask"],
+    labels,
+)
+
+# Define the model optimizer
+optimizer = AdamW(model.parameters(), lr=5e-5)
+
+# Training loop
+num_epochs = 3
+
+for epoch in range(num_epochs):
+    for batch in torch.utils.data.DataLoader(train_dataset, batch_size=2, shuffle=True):
+        input_ids, attention_mask, target_labels = batch
+
+        optimizer.zero_grad()
+
+        # Forward pass
+        outputs = model(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            labels=target_labels,
+        )
+
+        # Calculate loss
+        loss = outputs.loss
+
+        # Backward pass
+        loss.backward()
+
+        # Update weights
+        optimizer.step()
+
+# Save the fine-tuned model
+model.save_pretrained("fine_tuned_unilm")
+
+
+
+In this example:
+
+We use the UniLMForSeq2Seq model and UniLMTokenizer from the transformers library.
+You need to define and preprocess your training data, including input texts and target summaries.
+The training loop is simplified and may need to be adjusted based on your specific dataset and requirements.
+The fine-tuned model is then saved for later use.
+Please note that this example is a starting point, and the actual process of fine-tuning UniLM depends on your specific task and dataset. Additionally, training large language models requires substantial computational resources. Ensure you have access to a GPU for faster training times.
+
+
+
+use UniLM  model and summarize text with example, give code to develop from scrach
+
+
+Fine-tuning a model like UniLM from scratch requires a large dataset and substantial computational resources, as mentioned earlier. If you have a specific summarization dataset and are prepared for the computational requirements, you can follow a process similar to the example provided in the previous response. However, please note that it's not a trivial task and often requires a considerable amount of data and training time.
+
+Here's a simplified example using the transformers library to fine-tune UniLM on a hypothetical summarization task. Remember to replace the example data with your actual dataset.
+
+
+
+import torch
+from transformers import UniLMForSeq2Seq, UniLMTokenizer, AdamW
+from torch.utils.data import DataLoader, TensorDataset
+
+# Example: Fine-tuning UniLM for summarization
+
+# Load pre-trained UniLM model and tokenizer
+model = UniLMForSeq2Seq.from_pretrained("unilm-base-cased")
+tokenizer = UniLMTokenizer.from_pretrained("unilm-base-cased")
+
+# Define your training data (replace with your dataset)
+train_data = [
+    {"input_text": "Your input text for training", "target_summary": "The target summary"},
+    # Add more examples as needed
+]
+
+# Tokenize and prepare the data
+tokenized_data = tokenizer(
+    [item["input_text"] for item in train_data],
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)
+
+labels = tokenizer(
+    [item["target_summary"] for item in train_data],
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)["input_ids"]
+
+# Define your training dataset
+train_dataset = TensorDataset(
+    tokenized_data["input_ids"],
+    tokenized_data["attention_mask"],
+    labels,
+)
+
+# Define the model optimizer
+optimizer = AdamW(model.parameters(), lr=5e-5)
+
+# Training loop
+num_epochs = 3
+
+for epoch in range(num_epochs):
+    for batch in DataLoader(train_dataset, batch_size=2, shuffle=True):
+        input_ids, attention_mask, target_labels = batch
+
+        optimizer.zero_grad()
+
+        # Forward pass
+        outputs = model(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            labels=target_labels,
+        )
+
+        # Calculate loss
+        loss = outputs.loss
+
+        # Backward pass
+        loss.backward()
+
+        # Update weights
+        optimizer.step()
+
+# Save the fine-tuned model
+model.save_pretrained("fine_tuned_unilm")
+
+
+Please note that this is a highly simplified example, and you would typically need a more extensive dataset, careful hyperparameter tuning, and potentially additional model modifications for better performance.
+
+Before embarking on fine-tuning, ensure that you have a solid understanding of the data and the task at hand. Additionally, consider using pre-trained models fine-tuned on summarization tasks available in the Hugging Face model hub if you don't have access to a large dataset for fine-tuning from scratch.
+
+
+
+above example use text data for pdf lines
+
+
+Certainly! If you have text data from PDF lines that you'd like to use for fine-tuning a summarization model like UniLM, you can adapt the code accordingly. First, you need to convert your PDF lines into a format suitable for training. Here's a modified example assuming you have a dataset of PDF lines for a summarization task:
+
+
+
+import torch
+from transformers import UniLMForSeq2Seq, UniLMTokenizer, AdamW
+from torch.utils.data import DataLoader, TensorDataset
+
+# Example: Fine-tuning UniLM for summarization on PDF lines
+
+# Load pre-trained UniLM model and tokenizer
+model = UniLMForSeq2Seq.from_pretrained("unilm-base-cased")
+tokenizer = UniLMTokenizer.from_pretrained("unilm-base-cased")
+
+# Define your training data (replace with your PDF lines dataset)
+pdf_lines_data = [
+    {"pdf_line": "Your PDF line for training", "target_summary": "The target summary"},
+    # Add more examples as needed
+]
+
+# Tokenize and prepare the data
+tokenized_data = tokenizer(
+    [item["pdf_line"] for item in pdf_lines_data],
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)
+
+labels = tokenizer(
+    [item["target_summary"] for item in pdf_lines_data],
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)["input_ids"]
+
+# Define your training dataset
+train_dataset = TensorDataset(
+    tokenized_data["input_ids"],
+    tokenized_data["attention_mask"],
+    labels,
+)
+
+# Define the model optimizer
+optimizer = AdamW(model.parameters(), lr=5e-5)
+
+# Training loop
+num_epochs = 3
+
+for epoch in range(num_epochs):
+    for batch in DataLoader(train_dataset, batch_size=2, shuffle=True):
+        input_ids, attention_mask, target_labels = batch
+
+        optimizer.zero_grad()
+
+        # Forward pass
+        outputs = model(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            labels=target_labels,
+        )
+
+        # Calculate loss
+        loss = outputs.loss
+
+        # Backward pass
+        loss.backward()
+
+        # Update weights
+        optimizer.step()
+
+# Save the fine-tuned model
+model.save_pretrained("fine_tuned_unilm_pdf_lines")
+
+
+
+In this modified example, the pdf_lines_data list contains dictionaries with "pdf_line" representing the input text from the PDF lines and "target_summary" representing the target summary for each line. Adjust the data loading and processing steps according to your specific dataset format.
+
+Ensure that your dataset is representative of the summarization task you're interested in, and the target summaries are appropriately aligned with the input text. Fine-tuning requires careful consideration of your specific use case and dataset.
+
+
+
+no labels avaialabe in PDF text
+
+
+If you don't have explicit target summaries (labels) for your PDF lines, you might consider treating the task as an unsupervised or self-supervised learning problem. In this case, you can leverage the input PDF lines to generate pseudo-labels for each line, and then use those pseudo-labels for training.
+
+Here's an updated example to demonstrate a self-supervised approach for summarization using UniLM:
+
+
+import torch
+from transformers import UniLMForSeq2Seq, UniLMTokenizer, AdamW
+from torch.utils.data import DataLoader, TensorDataset
+
+# Example: Self-supervised fine-tuning of UniLM for summarization on PDF lines
+
+# Load pre-trained UniLM model and tokenizer
+model = UniLMForSeq2Seq.from_pretrained("unilm-base-cased")
+tokenizer = UniLMTokenizer.from_pretrained("unilm-base-cased")
+
+# Define your training data (replace with your PDF lines dataset)
+pdf_lines_data = [
+    {"pdf_line": "Your PDF line for training"},
+    # Add more examples as needed
+]
+
+# Tokenize and prepare the data
+tokenized_data = tokenizer(
+    [item["pdf_line"] for item in pdf_lines_data],
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)
+
+# Use the same input as target (self-supervised)
+labels = tokenized_data["input_ids"]
+
+# Define your training dataset
+train_dataset = TensorDataset(
+    tokenized_data["input_ids"],
+    tokenized_data["attention_mask"],
+    labels,
+)
+
+# Define the model optimizer
+optimizer = AdamW(model.parameters(), lr=5e-5)
+
+# Training loop
+num_epochs = 3
+
+for epoch in range(num_epochs):
+    for batch in DataLoader(train_dataset, batch_size=2, shuffle=True):
+        input_ids, attention_mask, target_labels = batch
+
+        optimizer.zero_grad()
+
+        # Forward pass
+        outputs = model(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            labels=target_labels,
+        )
+
+        # Calculate loss
+        loss = outputs.loss
+
+        # Backward pass
+        loss.backward()
+
+        # Update weights
+        optimizer.step()
+
+# Save the fine-tuned model
+model.save_pretrained("self_supervised_unilm_pdf_lines")
+
+
+
+In this example, the target labels (labels) are set to be the same as the input PDF lines, creating a self-supervised learning setup. The model is trained to generate the original input text as its own summary. This kind of self-supervised approach can be useful when explicit labels are not available.
+
+However, it's important to note that the effectiveness of this method depends on the nature of your data and the specific summarization task you are addressing. The generated summaries may not be as informative as with supervised approaches, but it can be a starting point for summarization without labeled data. Adjustments may be needed based on your specific use case and requirements.
+
+
+
+
+
+above example give for NLP data textual data
+
+
+If you're working with PDF text data and you don't have explicit labels for summarization, and you'd like to leverage a self-supervised approach, you can modify the example to fit the PDF lines directly. Below is an example using UniLM for self-supervised summarization on PDF lines:
+
+
+import torch
+from transformers import UniLMForSeq2Seq, UniLMTokenizer, AdamW
+from torch.utils.data import DataLoader, TensorDataset
+
+# Example: Self-supervised fine-tuning of UniLM for summarization on PDF lines
+
+# Load pre-trained UniLM model and tokenizer
+model = UniLMForSeq2Seq.from_pretrained("unilm-base-cased")
+tokenizer = UniLMTokenizer.from_pretrained("unilm-base-cased")
+
+# Define your training data (replace with your PDF lines dataset)
+pdf_lines_data = [
+    {"pdf_line": "Your PDF line for training"},
+    # Add more examples as needed
+]
+
+# Tokenize and prepare the data
+tokenized_data = tokenizer(
+    [item["pdf_line"] for item in pdf_lines_data],
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)
+
+# Use the same input as target (self-supervised)
+labels = tokenized_data["input_ids"]
+
+# Define your training dataset
+train_dataset = TensorDataset(
+    tokenized_data["input_ids"],
+    tokenized_data["attention_mask"],
+    labels,
+)
+
+# Define the model optimizer
+optimizer = AdamW(model.parameters(), lr=5e-5)
+
+# Training loop
+num_epochs = 3
+
+for epoch in range(num_epochs):
+    for batch in DataLoader(train_dataset, batch_size=2, shuffle=True):
+        input_ids, attention_mask, target_labels = batch
+
+        optimizer.zero_grad()
+
+        # Forward pass
+        outputs = model(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            labels=target_labels,
+        )
+
+        # Calculate loss
+        loss = outputs.loss
+
+        # Backward pass
+        loss.backward()
+
+        # Update weights
+        optimizer.step()
+
+# Save the fine-tuned model
+model.save_pretrained("self_supervised_unilm_pdf_lines")
+
+
+
+This example assumes that your PDF lines are the input data for both training and target labels. Adjust the pdf_lines_data dictionary to include your PDF lines accordingly.
+
+Keep in mind that the self-supervised approach might be less effective than supervised learning when explicit target summaries are available. The generated summaries in this case might closely resemble the input, and the model may not learn more nuanced summarization patterns without additional guidance from labeled data.
+
+
+above example give pdf read as well
+above example give train and predict and give output of text summarization
+
+
+Certainly! Here's an example that combines training a UniLM model for summarization on a small dataset and then using the trained model for predictions:
+
+
+import torch
+from transformers import UniLMForSeq2Seq, UniLMTokenizer, AdamW
+from torch.utils.data import DataLoader, TensorDataset
+
+# Example: Train and predict with UniLM for summarization
+
+# Load pre-trained UniLM model and tokenizer
+model = UniLMForSeq2Seq.from_pretrained("unilm-base-cased")
+tokenizer = UniLMTokenizer.from_pretrained("unilm-base-cased")
+
+# Define your training data (replace with your dataset)
+train_data = [
+    {"input_text": "Your input text for training", "target_summary": "The target summary"},
+    # Add more examples as needed
+]
+
+# Tokenize and prepare the training data
+tokenized_data = tokenizer(
+    [item["input_text"] for item in train_data],
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)
+
+labels = tokenizer(
+    [item["target_summary"] for item in train_data],
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)["input_ids"]
+
+# Define the training dataset
+train_dataset = TensorDataset(
+    tokenized_data["input_ids"],
+    tokenized_data["attention_mask"],
+    labels,
+)
+
+# Define the model optimizer
+optimizer = AdamW(model.parameters(), lr=5e-5)
+
+# Training loop
+num_epochs = 3
+
+for epoch in range(num_epochs):
+    for batch in DataLoader(train_dataset, batch_size=2, shuffle=True):
+        input_ids, attention_mask, target_labels = batch
+
+        optimizer.zero_grad()
+
+        # Forward pass
+        outputs = model(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            labels=target_labels,
+        )
+
+        # Calculate loss
+        loss = outputs.loss
+
+        # Backward pass
+        loss.backward()
+
+        # Update weights
+        optimizer.step()
+
+# Save the fine-tuned model
+model.save_pretrained("fine_tuned_unilm")
+
+# Load the fine-tuned model for predictions
+model = UniLMForSeq2Seq.from_pretrained("fine_tuned_unilm")
+
+# Example input text for prediction
+input_text = "Your input text for summarization"
+
+# Tokenize and prepare the input for prediction
+input_tokens = tokenizer(
+    input_text,
+    truncation=True,
+    padding=True,
+    return_tensors="pt",
+)
+
+# Generate summary
+generated_summary = model.generate(
+    input_ids=input_tokens["input_ids"],
+    attention_mask=input_tokens["attention_mask"],
+    max_length=50,  # Adjust as needed
+    num_beams=4,    # Adjust as needed
+    length_penalty=2.0,
+    early_stopping=True,
+)
+
+# Decode the generated summary
+generated_summary_text = tokenizer.decode(generated_summary[0], skip_special_tokens=True)
+
+# Print the results
+print("Original Input Text:")
+print(input_text)
+print("\nGenerated Summary:")
+print(generated_summary_text)
+
+
+
+This example first fine-tunes a UniLM model on a small dataset (train_data). After training, it saves the fine-tuned model. Then, it loads the fine-tuned model for predictions on a new input text (input_text). Adjust the training dataset and prediction input according to your specific use case.
+
+Please note that training a summarization model typically requires a large dataset for effective results, and this example is provided for illustrative purposes.
+
+
+User
+above example use UniLM  don't expect train data, only input from pdf , read pdf and give output as summarization
+
+
+I see, if you want to generate summaries using UniLM without explicit training data, you can use a pre-trained model for inference. You can leverage the pipeline class from the transformers library, which simplifies the process of using pre-trained models for various tasks, including summarization.
+
+Ensure you have the transformers library installed:
+
+
+pip install transformers
+
+
+from transformers import pipeline
+
+# Load the summarization pipeline for UniLM
+summarizer = pipeline("summarization", model="unilm-base-cased", tokenizer="unilm-base-cased")
+
+# Example PDF text
+pdf_text = """
+Your PDF text goes here. Replace this with the actual text from your PDF.
+"""
+
+# Generate summary
+generated_summary = summarizer(pdf_text, max_length=150, min_length=50, length_penalty=2.0, num_beams=4, early_stopping=True)
+
+# Print the generated summary
+print("Original PDF Text:")
+print(pdf_text)
+print("\nGenerated Summary:")
+print(generated_summary[0]['summary_text'])
+
+
+
+In this example:
+
+pipeline("summarization", model="unilm-base-cased", tokenizer="unilm-base-cased") loads the summarization pipeline using UniLM.
+summarizer(pdf_text, ...) generates a summary based on the input PDF text.
+Parameters like max_length, min_length, length_penalty, num_beams, and early_stopping can be adjusted based on your preferences.
+Replace the placeholder for pdf_text with the actual text from your PDF, and the script will generate a summary using the pre-trained UniLM model.
+
+Keep in mind that the quality of the generated summary depends on the content and nature of your PDF text. Adjust the parameters and experiment to find the settings that work best for your use case.
+
+
+above example add pdf read
+
+
+Certainly! To read text from a PDF file and then generate a summary using UniLM, you can use the PyMuPDF library for PDF extraction. Make sure to install the required libraries:
+
+
+pip install transformers pymupdf
+
+
+Here's an example script:
+
+import fitz  # PyMuPDF
+from transformers import pipeline
+
+# Load the summarization pipeline for UniLM
+summarizer = pipeline("summarization", model="unilm-base-cased", tokenizer="unilm-base-cased")
+
+# Function to extract text from a PDF file
+def extract_text_from_pdf(pdf_path):
+    with fitz.open(pdf_path) as doc:
+        text = ""
+        for page_num in range(doc.page_count):
+            page = doc[page_num]
+            text += page.get_text()
+    return text
+
+# Example PDF file path
+pdf_file_path = "path/to/your/pdf/file.pdf"
+
+# Extract text from the PDF
+pdf_text = extract_text_from_pdf(pdf_file_path)
+
+# Generate summary
+generated_summary = summarizer(pdf_text, max_length=150, min_length=50, length_penalty=2.0, num_beams=4, early_stopping=True)
+
+# Print the generated summary
+print("Original PDF Text:")
+print(pdf_text)
+print("\nGenerated Summary:")
+print(generated_summary[0]['summary_text'])
+
+
+
+Replace "path/to/your/pdf/file.pdf" with the actual path to your PDF file. The script will extract text from the PDF and generate a summary using the pre-trained UniLM model.
+
+Adjust the summarization parameters as needed for your specific requirements. Note that the quality of the summary depends on the content and nature of the PDF document.
+
+
+above example to get accurate summarization, use pdf read and do some text preprocess
+
+
+Certainly! To enhance the accuracy of the summarization, you can perform some text preprocessing on the extracted text from the PDF before generating the summary. This may include removing unnecessary elements, cleaning up the text, and handling any specific characteristics of your PDF content. Here's an example with added text preprocessing using regular expressions:
+
+
+import fitz  # PyMuPDF
+import re
+from transformers import pipeline
+
+# Load the summarization pipeline for UniLM
+summarizer = pipeline("summarization", model="unilm-base-cased", tokenizer="unilm-base-cased")
+
+# Function to extract and preprocess text from a PDF file
+def extract_and_preprocess_text_from_pdf(pdf_path):
+    with fitz.open(pdf_path) as doc:
+        text = ""
+        for page_num in range(doc.page_count):
+            page = doc[page_num]
+            text += page.get_text()
+
+    # Remove unnecessary characters, extra whitespaces, or specific patterns
+    text = re.sub(r'\s+', ' ', text)  # Replace multiple whitespaces with a single space
+    text = re.sub(r'\n+', ' ', text)  # Replace multiple newlines with a single space
+    text = re.sub(r'\[\d+\]', '', text)  # Remove footnote references like [1]
+
+    return text.strip()
+
+# Example PDF file path
+pdf_file_path = "path/to/your/pdf/file.pdf"
+
+# Extract and preprocess text from the PDF
+pdf_text = extract_and_preprocess_text_from_pdf(pdf_file_path)
+
+# Generate summary
+generated_summary = summarizer(pdf_text, max_length=150, min_length=50, length_penalty=2.0, num_beams=4, early_stopping=True)
+
+# Print the generated summary
+print("Original PDF Text:")
+print(pdf_text)
+print("\nGenerated Summary:")
+print(generated_summary[0]['summary_text'])
+
+
+In this example, the extract_and_preprocess_text_from_pdf function performs some basic text preprocessing using regular expressions. You can customize this function based on your specific needs and the characteristics of your PDF content. The goal is to clean up the text and remove any elements that may not contribute to the summarization task.
+
+Remember to adapt the preprocessing steps based on the characteristics of your PDF content and any specific patterns you observe. Text preprocessing is often task-dependent, so adjustments may be needed for different PDF documents.
+
+
+
+
+add more text preprocess on above example
+
+Certainly! Depending on the specific characteristics of your PDF content, you may want to include additional text preprocessing steps. Here's an extended example with more text preprocessing:
+
+
+import fitz  # PyMuPDF
+import re
+from transformers import pipeline
+
+# Load the summarization pipeline for UniLM
+summarizer = pipeline("summarization", model="unilm-base-cased", tokenizer="unilm-base-cased")
+
+# Function to extract and preprocess text from a PDF file
+def extract_and_preprocess_text_from_pdf(pdf_path):
+    with fitz.open(pdf_path) as doc:
+        text = ""
+        for page_num in range(doc.page_count):
+            page = doc[page_num]
+            text += page.get_text()
+
+    # Remove unnecessary characters, extra whitespaces, or specific patterns
+    text = re.sub(r'\s+', ' ', text)  # Replace multiple whitespaces with a single space
+    text = re.sub(r'\n+', ' ', text)  # Replace multiple newlines with a single space
+    text = re.sub(r'\[\d+\]', '', text)  # Remove footnote references like [1]
+    text = re.sub(r'\(cid:\d+\)', '', text)  # Remove specific patterns like (cid:123)
+    text = re.sub(r'\([^)]*\)', '', text)  # Remove content within parentheses
+    text = re.sub(r'\b[A-Za-z]\b', '', text)  # Remove single characters (e.g., 'a', 'A')
+    text = re.sub(r'\b\d+\b', '', text)  # Remove standalone numbers
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)  # Remove special characters except spaces
+
+    return text.strip()
+
+# Example PDF file path
+pdf_file_path = "path/to/your/pdf/file.pdf"
+
+# Extract and preprocess text from the PDF
+pdf_text = extract_and_preprocess_text_from_pdf(pdf_file_path)
+
+# Generate summary
+generated_summary = summarizer(pdf_text, max_length=150, min_length=50, length_penalty=2.0, num_beams=4, early_stopping=True)
+
+# Print the generated summary
+print("Original PDF Text:")
+print(pdf_text)
+print("\nGenerated Summary:")
+print(generated_summary[0]['summary_text'])
+
+
+
+In this extended example, additional preprocessing steps have been added to handle specific patterns, remove single characters, standalone numbers, and further clean up special characters. You can continue to customize and refine these preprocessing steps based on the characteristics of your PDF 
+
+
+above example is it possible to use  word embeedings?
+
+The example provided uses the UniLM model for summarization, and the model internally utilizes pre-trained word embeddings. The specific embeddings used in UniLM are based on the transformer architecture, which captures contextual information for each word in a sequence.
+
+However, if you want to use standalone word embeddings and perform custom operations on them, you can use pre-trained word embeddings models like Word2Vec, GloVe, or FastText. Here's an example using Word2Vec embeddings from the gensim library:
+
+
+import fitz  # PyMuPDF
+import re
+from gensim.models import Word2Vec
+from transformers import pipeline
+
+# Load the summarization pipeline for UniLM
+summarizer = pipeline("summarization", model="unilm-base-cased", tokenizer="unilm-base-cased")
+
+# Function to extract and preprocess text from a PDF file
+def extract_and_preprocess_text_from_pdf(pdf_path):
+    with fitz.open(pdf_path) as doc:
+        text = ""
+        for page_num in range(doc.page_count):
+            page = doc[page_num]
+            text += page.get_text()
+
+    # Additional preprocessing as needed
+    text = re.sub(r'\s+', ' ', text)  # Replace multiple whitespaces with a single space
+    text = re.sub(r'\n+', ' ', text)  # Replace multiple newlines with a single space
+    text = re.sub(r'\[\d+\]', '', text)  # Remove footnote references like [1]
+    text = re.sub(r'\(cid:\d+\)', '', text)  # Remove specific patterns like (cid:123)
+    text = re.sub(r'\([^)]*\)', '', text)  # Remove content within parentheses
+    text = re.sub(r'\b[A-Za-z]\b', '', text)  # Remove single characters (e.g., 'a', 'A')
+    text = re.sub(r'\b\d+\b', '', text)  # Remove standalone numbers
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)  # Remove special characters except spaces
+
+    return text.strip()
+
+# Example PDF file path
+pdf_file_path = "path/to/your/pdf/file.pdf"
+
+# Extract and preprocess text from the PDF
+pdf_text = extract_and_preprocess_text_from_pdf(pdf_file_path)
+
+# Tokenize the preprocessed text into words
+tokenized_text = [word.lower() for word in pdf_text.split()]
+
+# Train Word2Vec model
+word2vec_model = Word2Vec([tokenized_text], vector_size=100, window=5, min_count=1, workers=4)
+
+# Get the embedding for a specific word (example: 'example_word')
+example_word_embedding = word2vec_model.wv['example_word']
+
+# Print the embedding
+print("Embedding for 'example_word':", example_word_embedding)
+
+# Continue with UniLM summarization or any other custom operations as needed
+generated_summary = summarizer(pdf_text, max_length=150, min_length=50, length_penalty=2.0, num_beams=4, early_stopping=True)
+print("\nGenerated Summary:")
+print(generated_summary[0]['summary_text'])
+
+
+
+In this example, the Word2Vec model is trained on the preprocessed text, and you can obtain word embeddings for specific words using word2vec_model.wv['example_word']. The word embeddings can be further used for various tasks or analyses. Please note that the dimension (vector_size), window size (window), and other parameters of Word2Vec can be adjusted based on your specific requirements.
+
+
+
+above example use word embeedings and do summarization on word embeedings
+summarizer function use embeedings
+
+
+
+I apologize for any confusion. The summarization pipeline provided by the transformers library typically uses pre-trained transformer models like BERT, GPT, or UniLM, which internally work with subword embeddings rather than standalone word embeddings.
+
+If you specifically want to use your own custom word embeddings (e.g., Word2Vec embeddings) and perform summarization using those embeddings, it would involve a more custom approach. Traditional summarization models usually operate at the token or subword level, and directly applying them to word embeddings might not be straightforward.
+
+Here's a simplified example using Word2Vec embeddings for a custom summarization approach:
+
+
+
+from gensim.models import Word2Vec
+import fitz  # PyMuPDF
+import re
+from sklearn.metrics.pairwise import cosine_similarity
+from collections import Counter
+
+# Function to extract and preprocess text from a PDF file
+def extract_and_preprocess_text_from_pdf(pdf_path):
+    with fitz.open(pdf_path) as doc:
+        text = ""
+        for page_num in range(doc.page_count):
+            page = doc[page_num]
+            text += page.get_text()
+
+    # Additional preprocessing as needed
+    text = re.sub(r'\s+', ' ', text)  # Replace multiple whitespaces with a single space
+    text = re.sub(r'\n+', ' ', text)  # Replace multiple newlines with a single space
+    text = re.sub(r'\[\d+\]', '', text)  # Remove footnote references like [1]
+    text = re.sub(r'\(cid:\d+\)', '', text)  # Remove specific patterns like (cid:123)
+    text = re.sub(r'\([^)]*\)', '', text)  # Remove content within parentheses
+    text = re.sub(r'\b[A-Za-z]\b', '', text)  # Remove single characters (e.g., 'a', 'A')
+    text = re.sub(r'\b\d+\b', '', text)  # Remove standalone numbers
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)  # Remove special characters except spaces
+
+    return text.strip()
+
+# Function to generate a summary using Word2Vec embeddings
+def generate_summary_using_embeddings(text, word2vec_model, summary_length=100):
+    # Tokenize the preprocessed text into words
+    tokenized_text = [word.lower() for word in text.split()]
+
+    # Calculate the sentence embeddings based on the mean of word embeddings
+    sentence_embeddings = [word2vec_model.wv[word] for word in tokenized_text if word in word2vec_model.wv]
+    sentence_embedding = sum(sentence_embeddings) / len(sentence_embeddings)
+
+    # Calculate cosine similarity between sentence embeddings and select top sentences
+    similarities = [cosine_similarity([word2vec_model.wv[word]], [sentence_embedding])[0][0] for word in tokenized_text if word in word2vec_model.wv]
+    ranked_sentences = [sentence for _, sentence in sorted(zip(similarities, tokenized_text), reverse=True)]
+
+    # Generate summary based on the top sentences
+    summary = " ".join(ranked_sentences[:summary_length])
+
+    return summary
+
+# Example PDF file path
+pdf_file_path = "path/to/your/pdf/file.pdf"
+
+# Extract and preprocess text from the PDF
+pdf_text = extract_and_preprocess_text_from_pdf(pdf_file_path)
+
+# Train Word2Vec model
+word2vec_model = Word2Vec([pdf_text.split()], vector_size=100, window=5, min_count=1, workers=4)
+
+# Generate summary using Word2Vec embeddings
+generated_summary = generate_summary_using_embeddings(pdf_text, word2vec_model, summary_length=50)
+
+# Print the generated summary
+print("Original PDF Text:")
+print(pdf_text)
+print("\nGenerated Summary:")
+print(generated_summary)
+
+
+
+In this example, the generate_summary_using_embeddings function calculates sentence embeddings based on the mean of word embeddings and selects the top sentences using cosine similarity. The generated summary is based on these selected sentences. Adjust the parameters and logic based on your specific requirements. Keep in mind that this approach is a simplified example and may not capture the complexity of summarization models used in NLP tasks.

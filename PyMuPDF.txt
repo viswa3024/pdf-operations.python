@@ -1,0 +1,182 @@
+PyMuPDF 
+
+explain above package and give all funtionalities with code example
+
+PyMuPDF is a Python binding for the MuPDF library, which is a lightweight PDF, XPS, and E-book viewer. PyMuPDF allows you to work with PDF documents in Python, providing functionalities such as reading, writing, and manipulating PDF content.
+
+Here are some common functionalities along with code examples:
+
+
+1 . Opening and Reading a PDF:
+
+Open a PDF file and extract text from a specific page.
+
+
+import fitz
+
+# Open a PDF file
+pdf_document = fitz.open('document.pdf')
+
+# Get the number of pages
+num_pages = pdf_document.page_count
+print(f'Total number of pages: {num_pages}')
+
+# Extract text from each page
+for page_num in range(num_pages):
+    page = pdf_document[page_num]
+    text = page.get_text()
+    print(f'Page {page_num + 1}:\n{text}\n')
+
+# Close the PDF document
+pdf_document.close()
+
+2 . Text Search:
+
+Search for a specific keyword in the PDF document and get the coordinates.
+
+
+import fitz
+
+# Open a PDF file
+pdf_document = fitz.open('document.pdf')
+
+# Search for a keyword
+keyword = 'example'
+for page_num in range(pdf_document.page_count):
+    page = pdf_document[page_num]
+    matches = page.search_for(keyword)
+    if matches:
+        print(f'Keyword "{keyword}" found on page {page_num + 1} at coordinates: {matches}')
+
+# Close the PDF document
+pdf_document.close()
+
+
+3 . Image Extraction:
+
+Extract images from a PDF document.
+
+
+import fitz
+
+# Open a PDF file
+pdf_document = fitz.open('document.pdf')
+
+# Extract images from each page
+for page_num in range(pdf_document.page_count):
+    page = pdf_document[page_num]
+    images = page.get_images(full=True)
+    for img_index, img_info in enumerate(images):
+        image, image_index = pdf_document.extract_image(img_info)
+        image.save(f'image_page{page_num + 1}_img{img_index + 1}.png', 'png')
+
+# Close the PDF document
+pdf_document.close()
+
+
+4 . Page Rotation:
+
+Rotate pages in a PDF document.
+
+
+import fitz
+
+# Open a PDF file
+pdf_document = fitz.open('document.pdf')
+
+# Rotate all pages by 90 degrees clockwise
+for page_num in range(pdf_document.page_count):
+    page = pdf_document[page_num]
+    page.rotate_clockwise(90)
+
+# Save the rotated PDF to a new file
+pdf_document.save('rotated_document.pdf')
+
+# Close the PDF document
+pdf_document.close()
+
+
+5 . Text Highlighting:
+
+Highlight specific text on a page.
+
+
+import fitz
+
+# Open a PDF file
+pdf_document = fitz.open('document.pdf')
+
+# Specify the text to highlight
+keyword = 'example'
+
+# Highlight text occurrences on each page
+for page_num in range(pdf_document.page_count):
+    page = pdf_document[page_num]
+    text_instances = page.search_for(keyword)
+    for inst in text_instances:
+        highlight = page.add_highlight_annot(inst)
+
+# Save the modified PDF to a new file
+pdf_document.save('highlighted_document.pdf')
+
+# Close the PDF document
+pdf_document.close()
+
+
+6 . Page Cropping:
+
+Crop pages in a PDF document.
+
+
+import fitz
+
+# Open a PDF file
+pdf_document = fitz.open('document.pdf')
+
+# Crop each page to a specific rectangle
+for page_num in range(pdf_document.page_count):
+    page = pdf_document[page_num]
+    rect = fitz.Rect(50, 50, 400, 400)  # Define the rectangle (left, top, right, bottom)
+    page.set_crop(rect)
+
+# Save the cropped PDF to a new file
+pdf_document.save('cropped_document.pdf')
+
+# Close the PDF document
+pdf_document.close()
+
+
+
+---------------
+
+what is fitz
+
+
+In PyMuPDF, fitz is the module that provides the main interface for working with PDF documents. It is part of the PyMuPDF library, which is a Python binding for the MuPDF library.
+
+Here's a breakdown of the terms:
+
+PyMuPDF: This is the Python library that provides bindings for MuPDF, a lightweight PDF and XPS viewer. It allows you to work with PDF documents in Python.
+
+MuPDF: The underlying C library, MuPDF, is a free and open-source software for viewing and converting PDF, XPS, and other document formats. It's known for its speed and efficiency.
+
+fitz: In PyMuPDF, fitz is the module that represents the core functionality for document handling. It provides classes and methods for working with PDF files, including opening and manipulating pages, extracting text, handling annotations, and more.
+
+When you see code like import fitz in PyMuPDF examples, it means that the fitz module is being imported to work with the document-related functionalities.
+
+Here's a basic example using fitz to open a PDF document:
+
+
+import fitz
+
+# Open a PDF file
+pdf_document = fitz.open('example.pdf')
+
+# Access pages and extract text
+for page_num in range(pdf_document.page_count):
+    page = pdf_document[page_num]
+    text = page.get_text()
+    print(f'Page {page_num + 1}:\n{text}\n')
+
+# Close the PDF document
+pdf_document.close()
