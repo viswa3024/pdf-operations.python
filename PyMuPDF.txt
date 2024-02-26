@@ -284,3 +284,88 @@ if __name__ == "__main__":
 
 
 Remember to replace "path/to/your/file.pdf" with the actual path to your PDF file and provide a valid path for the image_folder variable. This example demonstrates how to extract text, images, and metadata from a PDF using PyMuPDF. Depending on your specific needs, you may explore additional functionalities provided by PyMuPDF, such as working with annotations, outlines, and more. Refer to the PyMuPDF documentation for more detailed information: https://pymupdf.readthedocs.io/
+
+
+
+----------------------------------------------------------
+
+
+above example add Extracting Tables
+
+PyMuPDF is primarily focused on text and image extraction, and it doesn't have built-in table extraction features. However, you can use additional libraries like tabula-py or camelot-py for table extraction. Here's an example of integrating tabula-py with the previous PyMuPDF example to extract tables:
+
+
+import fitz  # PyMuPDF
+import tabula
+
+def extract_text(pdf_path):
+    text = ""
+    doc = fitz.open(pdf_path)
+    
+    for page_number in range(doc.page_count):
+        page = doc[page_number]
+        text += page.get_text()
+    
+    doc.close()
+    return text
+
+def extract_images(pdf_path, image_folder):
+    doc = fitz.open(pdf_path)
+    
+    for page_number in range(doc.page_count):
+        page = doc[page_number]
+        image_list = page.get_images(full=True)
+        
+        for img_index, img_info in enumerate(image_list):
+            image_index, base_image = img_info
+            image = doc.extract_image(image_index)
+            image_bytes = image["image"]
+            
+            with open(f"{image_folder}/page{page_number + 1}_img{img_index + 1}.png", "wb") as image_file:
+                image_file.write(image_bytes)
+    
+    doc.close()
+
+def extract_metadata(pdf_path):
+    doc = fitz.open(pdf_path)
+    metadata = doc.metadata
+    doc.close()
+    return metadata
+
+def extract_tables(pdf_path):
+    tables = tabula.read_pdf(pdf_path, pages='all', multiple_tables=True)
+    return tables
+
+if __name__ == "__main__":
+    # Replace with the path to your PDF file
+    pdf_path = "path/to/your/file.pdf"
+    
+    # Extract text
+    text_result = extract_text(pdf_path)
+    print("Extracted Text:")
+    print(text_result)
+    
+    # Extract images to a folder
+    image_folder = "path/to/your/image_folder"
+    extract_images(pdf_path, image_folder)
+    print(f"Images extracted to {image_folder}")
+    
+    # Extract metadata
+    metadata_result = extract_metadata(pdf_path)
+    print("Metadata:")
+    print(metadata_result)
+    
+    # Extract tables using tabula-py
+    tables_result = extract_tables(pdf_path)
+    print("Tables:")
+    print(tables_result)
+
+
+
+Make sure to install the required libraries using:
+
+
+pip install PyMuPDF tabula-py
+
+
+This example combines PyMuPDF for text and image extraction with tabula-py for table extraction. Adjust the paths and integrate it into your workflow accordingly.
